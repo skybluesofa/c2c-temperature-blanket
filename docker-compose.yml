@@ -1,0 +1,39 @@
+version: '3'
+services:
+  c2c_blanket_app:
+    container_name: c2c_blanket_app
+    build:
+      context: .
+      dockerfile: ./meta_information/docker/c2c_blanket_app/Dockerfile
+    image: c2c_blanket_app
+    environment:
+      - SERVICE_NAME=app
+      - SERVICE_TAGS=dev
+      - DB_TYPE=mysql
+      - DB_HOST=c2c_blanket_db #DB_HOST should match the service name of the database container
+      - DB_DATABASE=c2c_blanket
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    working_dir: /var/www/c2c_blanket
+    volumes:
+      - ./:/var/www/c2c_blanket
+    networks:
+      - c2c_blanket
+
+  c2c_blanket_web:
+    image: nginx:alpine
+    container_name: c2c_blanket_web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./storage/logs/nginx:/var/log/nginx
+      - ./:/var/www/c2c_blanket
+      - ./meta_information/server_config/c2c_blanket_web/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - c2c_blanket
+    depends_on:
+      - c2c_blanket_app
+
+networks:
+  c2c_blanket:
