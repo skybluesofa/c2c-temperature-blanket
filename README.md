@@ -17,7 +17,7 @@
 
 1. Get the code onto your computer
     1. Open the `terminal` application on your computer
-    2. `composer create-project skybluesofa\c2c-temperature-blanket example-app` where "example-app" is the name of the folder you'll be creating. A suggestion would be 'c2c-temperature-blanket'.
+    2. `composer create-project skybluesofa/c2c-temperature-blanket example-app` where "example-app" is the name of the folder you'll be creating. A suggestion would be 'c2c-temperature-blanket'.
 2. Using Docker (Optional)
     1. `docker-compose build`
     2. `docker-compose up -d`
