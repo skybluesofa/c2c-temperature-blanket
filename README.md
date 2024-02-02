@@ -5,7 +5,7 @@
 ### The Less-technical Method
 
 1. Get the code onto your computer
-    1. Click the green `Code` button at the top of the page
+    1. Click the green `Code` button at the [top of the page](https://github.com/skybluesofa/c2c-temperature-blanket)
     2. Click the `Download ZIP` link
     3. Unzip the file on your computer
 2. Running the code
@@ -78,7 +78,7 @@ Each range also designates the color shown on the screen as well as a color 'nam
 - The second element (shown uppercase), is the name of the color shown. For instance, the yarn using this blue might be called 'Royal Blue'.
     - If the second element is not provided, we'll try to get a color name from an online database of colors.
 
-## Using Temperature-Blanket.com URLs (Work in Progress)
+## Using Temperature-Blanket.com URLs
 
 In the `config/temperature-blanket-dot-com` folder, there is a file named `default.txt`. This file begins without any contents.
 
