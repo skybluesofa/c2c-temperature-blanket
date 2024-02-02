@@ -2,6 +2,7 @@
 $hex = '#000';
 $color = 'No Data';
 $title = 'Precip';
+$precipitation = 0;
 $precipitationType = 'n/a';
 
 if (!empty($positionInformation['weather']) && is_array($positionInformation['weather']['precipitation'])) {
