@@ -1,10 +1,11 @@
 {
-    "name": "laravel/laravel",
+    "name": "skybluesofa/c2c-temperature-blanket",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "An app to allow designing a C2C Temperature Blanket",
     "keywords": [
         "laravel",
-        "framework"
+        "c2c",
+        "crochet"
     ],
     "license": "MIT",
     "require": {
