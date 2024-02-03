@@ -16,6 +16,6 @@ if (!empty($positionInformation['weather']) && !is_null($positionInformation['we
 }
 @endphp
 
-<td style="background:{{ $hex }};min-width:100px;min-height:100px;color:#fff;font-family:arial;font-size:16px;">
+<div class="min-h-24 p-1 rounded text-white" style="background:{{ $hex }};">
     {{ $color }}<br>{{ $highTemp }}&deg;
-</td>
+</div>

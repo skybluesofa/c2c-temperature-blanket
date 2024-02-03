@@ -1,5 +1,5 @@
 @includeFirst(
-    ['c2c.cell.'.$cellDesign, 'c2c.cell.generic'],
+    ['c2c.grid.cell.'.$cellDesign, 'c2c.grid.cell.generic'],
     [
         'cellDesign' => $cellDesign,
         'positionInformation' => $positionInformation,

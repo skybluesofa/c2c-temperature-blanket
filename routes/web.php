@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('c2c.index', ['info' => app()->make(TemperatureBlanketController::class)->show()]);
 });
 
 Route::get('/version', function () {
@@ -24,10 +24,6 @@ Route::get('/version', function () {
 });
 
 Route::get('/generate', [OldTemperatureBlanketController::class, 'generate']);
-
-Route::get('/', function () {
-    return view('c2c', ['info' => app()->make(TemperatureBlanketController::class)->show()]);
-});
 
 Route::get('/info', function () {
     return response()->json([
