@@ -33,6 +33,6 @@ if (!empty($positionInformation['weather']) && is_array($positionInformation['we
 }
 @endphp
 
-<td style="background:{{ $hex }};min-width:100px;min-height:100px;color:#fff;font-family:arial;font-size:16px;">
+<div class="min-h-24 p-1 rounded text-white" style="background:{{ $hex }}">
     {{ $color }}<br>{{ $precipitation }}" {{ $title }}
-</td>
+</div>
