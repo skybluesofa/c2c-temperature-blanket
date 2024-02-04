@@ -2,10 +2,10 @@
 
 namespace App\Apis\TemperatureBlanketDotCom;
 
+use App\Facades\ColorNames;
+use App\Facades\GeoNames;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http;
 
 class TemperatureBlanketDotCom
 {
@@ -120,10 +120,10 @@ class TemperatureBlanketDotCom
 
         if (isset($config[$key])) {
             foreach ($config[$key] as $hex => $range) {
-                $colorName = Cache::remember('color.'.$hex, $this->cacheTime, function () use ($hex) {
-                    return Http::get('https://colornames.org/search/json/?hex='.$hex)['name'] ?? $hex;
-                });
-                $colors[min($range)] = ['#'.$hex, $colorName];
+                $colors[min($range)] = [
+                    '#'.$hex,
+                    ColorNames::get($hex),
+                ];
             }
         }
 
@@ -143,24 +143,9 @@ class TemperatureBlanketDotCom
 
         return [
             'geoname_id' => $geoNameId,
-            'location' => $this->getCoordinatesForGeonameId($geoNameId),
+            'location' => GeoNames::get($geoNameId),
             'date' => rtrim($meta[1], '!'),
         ];
-    }
-
-    protected function getCoordinatesForGeonameId($geoNameId): ?array
-    {
-        return Cache::remember('geoName.'.$geoNameId, $this->cacheTime, function () use ($geoNameId) {
-            $url = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-500/records?select=coordinates,timezone&where=geoname_id%3D'.$geoNameId.'&limit=1' ?? null;
-            $response = Http::get($url)->body();
-
-            $json = json_decode($response, true);
-            if (! isset($json['results'][0])) {
-                return null;
-            }
-
-            return $json['results'][0];
-        });
     }
 
     protected function parseTemperaturesColors(array $config): array

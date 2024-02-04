@@ -9,6 +9,7 @@
         <link rel="icon" href="favicon.svg">
         <link rel="mask-icon" href="favicon.svg" color="#fff">
         <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
     <body class="antialiased bg-stone-800">
         <div class="fixed top-0 left-0 right-0 bg-stone-900 p-8 flex flex-row h-24">
@@ -21,31 +22,41 @@
         </div>
 
         <div class="grid grid-cols-3 gap-4 p-8 pt-32">
-                    @foreach ($info['rows']['previous']['cells'] as $position => $positionInformation)
-                <div class="grid grid-cols-4 gap-1 @if ($position!='current') opacity-50 @else opacity-75 @endif">
-                    @foreach (end($info['meta']['design']) as $cellDesign)
-                            @include('c2c.grid.cell', [
-                                        'cellDesign' => $cellDesign,
-                                        'positionInformation' => $positionInformation,
-                                        'colorInformation' => $info['meta']['colors'],
-                                    ])
-                    @endforeach
-                </div>
-            @endforeach
-            @foreach ($info['rows']['current']['cells'] as $position => $positionInformation)
-            <div class="grid grid-cols-4 gap-1 @if ($position!='current') opacity-75 @else bg-stone-700 bg-opacity-50 outline outline-stone-700/50 outline-4 @endif">
-                    @foreach ($info['meta']['design'] as $rows)
-                        @foreach ($rows as $cellDesign)
+            @foreach ($info['rows']['previous']['cells'] as $position => $positionInformation)
+                @if (empty($positionInformation['weather']))
+                    <div></div>
+                @else
+                    <div class="grid grid-cols-4 gap-1 @if ($position!='current') opacity-50 @else opacity-75 @endif">
+                        @foreach (end($info['meta']['design']) as $cellDesign)
                             @include('c2c.grid.cell', [
                                         'cellDesign' => $cellDesign,
                                         'positionInformation' => $positionInformation,
                                         'colorInformation' => $info['meta']['colors'],
                                     ])
                         @endforeach
-                    @endforeach
-                </div>
-                @endforeach
-                @include('c2c.grid.cell.metadata', [
+                    </div>
+                @endif
+            @endforeach
+            
+            @foreach ($info['rows']['current']['cells'] as $position => $positionInformation)
+                @if (empty($positionInformation['weather']))
+                    <div class="bg-stone-900 text-stone-600 p-4 flex flex-row min-h-96"><div class="grow self-center text-center"><i class="bi bi-slash-circle block text-3xl pb-2"></i>No data available for this date</div></div>
+                @else
+                    <div class="grid grid-cols-4 gap-1 @if ($position!='current') opacity-75 @else bg-stone-700 bg-opacity-50 outline outline-stone-700/50 outline-4 @endif">
+                        @foreach ($info['meta']['design'] as $rows)
+                            @foreach ($rows as $cellDesign)
+                                @include('c2c.grid.cell', [
+                                            'cellDesign' => $cellDesign,
+                                            'positionInformation' => $positionInformation,
+                                            'colorInformation' => $info['meta']['colors'],
+                                        ])
+                            @endforeach
+                        @endforeach
+                    </div>
+                @endif
+            @endforeach
+            
+            @include('c2c.grid.cell.metadata', [
                         'meta' => $info['meta'],
                         'date' => $info['rows']['current']['cells']['previous']['date'],
                     ])
