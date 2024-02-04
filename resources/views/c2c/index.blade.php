@@ -40,7 +40,7 @@
             
             @foreach ($info['rows']['current']['cells'] as $position => $positionInformation)
                 @if (empty($positionInformation['weather']))
-                    <div class="bg-stone-900 text-stone-600 p-4 flex flex-row"><div class="grow self-center text-center"><i class="bi bi-slash-circle block text-3xl pb-2"></i>No data available for this date</div></div>
+                    <div class="bg-stone-900 text-stone-600 p-4 flex flex-row min-h-96"><div class="grow self-center text-center"><i class="bi bi-slash-circle block text-3xl pb-2"></i>No data available for this date</div></div>
                 @else
                     <div class="grid grid-cols-4 gap-1 @if ($position!='current') opacity-75 @else bg-stone-700 bg-opacity-50 outline outline-stone-700/50 outline-4 @endif">
                         @foreach ($info['meta']['design'] as $rows)
