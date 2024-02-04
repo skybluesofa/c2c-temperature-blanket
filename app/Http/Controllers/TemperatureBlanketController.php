@@ -33,18 +33,18 @@ class TemperatureBlanketController extends Controller
         $yesterday = $this->date->clone()->subDay(1);
         $tomorrow = $this->date->clone()->addDay(1);
         $this->weatherData['current_row'] = collect([
-            $yesterday->format('Y-m-d') => $cachedWeatherData[$yesterday->format('Y-m-d')] ?? null,
-            $this->date->format('Y-m-d') => $cachedWeatherData[$this->date->format('Y-m-d')] ?? null,
-            $tomorrow->format('Y-m-d') => $cachedWeatherData[$tomorrow->format('Y-m-d')] ?? null,
+            $yesterday->format('Y-m-d') => OpenMeteo::get($yesterday) ?? null,
+            $this->date->format('Y-m-d') => OpenMeteo::get($this->date) ?? null,
+            $tomorrow->format('Y-m-d') => OpenMeteo::get($tomorrow) ?? null,
         ]);
 
         $yesterdayPreviousRowDate = $yesterday->clone()->subDay(TemperatureBlanketConfig::get('columns'));
         $todayPreviousRowDate = $this->date->clone()->subDay(TemperatureBlanketConfig::get('columns'));
         $tomorrowPreviousRowDate = $tomorrow->clone()->subDay(TemperatureBlanketConfig::get('columns'));
         $this->weatherData['previous_row'] = collect([
-            $yesterdayPreviousRowDate->format('Y-m-d') => $cachedWeatherData[$yesterdayPreviousRowDate->format('Y-m-d')] ?? null,
-            $todayPreviousRowDate->format('Y-m-d') => $cachedWeatherData[$todayPreviousRowDate->format('Y-m-d')] ?? null,
-            $tomorrowPreviousRowDate->format('Y-m-d') => $cachedWeatherData[$tomorrowPreviousRowDate->format('Y-m-d')] ?? null,
+            $yesterdayPreviousRowDate->format('Y-m-d') => OpenMeteo::get($yesterdayPreviousRowDate) ?? null,
+            $todayPreviousRowDate->format('Y-m-d') => OpenMeteo::get($todayPreviousRowDate) ?? null,
+            $tomorrowPreviousRowDate->format('Y-m-d') => OpenMeteo::get($tomorrowPreviousRowDate) ?? null,
         ]);
 
         return $this->weatherData;

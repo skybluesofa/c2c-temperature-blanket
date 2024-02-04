@@ -68,8 +68,6 @@ class OpenMeteo
                     ];
                 }
 
-                print_r($data);
-
                 Cache::set($this->getCacheKey($weatherDate), $data, $this->ttl);
                 Cache::set($this->getCacheWrittenKey($weatherDate), $now, $this->ttl);
             }
