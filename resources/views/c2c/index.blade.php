@@ -6,6 +6,8 @@
 
         <title>{{ (new Carbon\Carbon())->format('Y') }} Temperature Blanket</title>
         
+        <link rel="icon" href="favicon.svg">
+        <link rel="mask-icon" href="favicon.svg" color="#fff">
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body class="antialiased bg-stone-800">
@@ -18,8 +20,32 @@
             </h2>
         </div>
 
-        <div class="grid grid-cols-3 gap-4 p-8 pt-32">
-            @include('c2c.grid.cell.metadata', [
+        <div class="grid grid-cols-3 gap-4 p-8 pt-32 pl-20">
+                    @foreach ($info['rows']['previous']['cells'] as $position => $positionInformation)
+                <div class="grid grid-cols-4 gap-1 @if ($position!='current') opacity-50 @else opacity-75 @endif">
+                    @foreach (end($info['meta']['design']) as $cellDesign)
+                            @include('c2c.grid.cell', [
+                                        'cellDesign' => $cellDesign,
+                                        'positionInformation' => $positionInformation,
+                                        'colorInformation' => $info['meta']['colors'],
+                                    ])
+                    @endforeach
+                </div>
+            @endforeach
+            @foreach ($info['rows']['current']['cells'] as $position => $positionInformation)
+            <div class="grid grid-cols-4 gap-1 @if ($position!='current') opacity-75 @else bg-stone-700 bg-opacity-50 outline outline-stone-700/50 outline-4 @endif">
+                    @foreach ($info['meta']['design'] as $rows)
+                        @foreach ($rows as $cellDesign)
+                            @include('c2c.grid.cell', [
+                                        'cellDesign' => $cellDesign,
+                                        'positionInformation' => $positionInformation,
+                                        'colorInformation' => $info['meta']['colors'],
+                                    ])
+                        @endforeach
+                    @endforeach
+                </div>
+                @endforeach
+                @include('c2c.grid.cell.metadata', [
                         'meta' => $info['meta'],
                         'date' => $info['rows']['current']['cells']['previous']['date'],
                     ])
@@ -31,19 +57,6 @@
                         'meta' => $info['meta'],
                         'date' => $info['rows']['current']['cells']['next']['date'],
                     ])
-            @foreach ($info['rows']['current']['cells'] as $position => $positionInformation)
-                <div class="grid grid-cols-4 gap-1">
-                    @foreach ($info['meta']['design'] as $rows)
-                        @foreach ($rows as $cellDesign)
-                            @include('c2c.grid.cell', [
-                                        'cellDesign' => $cellDesign,
-                                        'positionInformation' => $positionInformation,
-                                        'colorInformation' => $info['meta']['colors'],
-                                    ])
-                        @endforeach
-                    @endforeach
-                </div>
-            @endforeach
         </div>
 
         <div class="text-stone-500 fixed bottom-4 left-0 right-0 text-sm text-center">Data cached on {{ $info['meta']['cachedDate'] }}</div>
