@@ -2,6 +2,7 @@
 
 namespace App\Apis\TemperatureBlanketDotCom;
 
+use App\Facades\ColorNames;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -120,10 +121,10 @@ class TemperatureBlanketDotCom
 
         if (isset($config[$key])) {
             foreach ($config[$key] as $hex => $range) {
-                $colorName = Cache::remember('color.'.$hex, $this->cacheTime, function () use ($hex) {
-                    return Http::get('https://colornames.org/search/json/?hex='.$hex)['name'] ?? $hex;
-                });
-                $colors[min($range)] = ['#'.$hex, $colorName];
+                $colors[min($range)] = [
+                    '#'.$hex,
+                    ColorNames::get($hex),
+                ];
             }
         }
 
