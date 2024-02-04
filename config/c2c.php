@@ -1,6 +1,10 @@
 <?php
 
+use Carbon\Carbon;
+
 return [
+    'url_config' => false,
+    'year' => (new Carbon)->format('Y'),
     'latitude' => env('C2C_BLANKET_LATITUDE'),
     'longitude' => env('C2C_BLANKET_LONGITUDE'),
     'timezone' => urlencode(env('APP_TIMEZONE')),

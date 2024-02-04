@@ -51,7 +51,7 @@ class TemperatureBlanketController extends Controller
                 'cachedDate' => Cache::get('openmeteo.'.$this->date->format('Ymd').'.written')?->format('Y-m-d h:i:sa') ?? null,
                 'columns' => TemperatureBlanketConfig::get('columns'),
                 'design' => TemperatureBlanketConfig::design(),
-                'colors' => TemperatureBlanketConfig::colors(),
+                'colors' => TemperatureBlanketConfig::get('colors.loaded'),
             ],
             'rows' => [
                 'previous' => [
