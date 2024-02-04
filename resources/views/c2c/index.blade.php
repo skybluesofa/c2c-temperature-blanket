@@ -23,15 +23,19 @@
 
         <div class="grid grid-cols-3 gap-4 p-8 pt-32">
             @foreach ($info['rows']['previous']['cells'] as $position => $positionInformation)
-                <div class="grid grid-cols-4 gap-1 @if ($position!='current') opacity-50 @else opacity-75 @endif">
-                    @foreach (end($info['meta']['design']) as $cellDesign)
-                        @include('c2c.grid.cell', [
-                                    'cellDesign' => $cellDesign,
-                                    'positionInformation' => $positionInformation,
-                                    'colorInformation' => $info['meta']['colors'],
-                                ])
-                    @endforeach
-                </div>
+                @if (empty($positionInformation['weather']))
+                    <div></div>
+                @else
+                    <div class="grid grid-cols-4 gap-1 @if ($position!='current') opacity-50 @else opacity-75 @endif">
+                        @foreach (end($info['meta']['design']) as $cellDesign)
+                            @include('c2c.grid.cell', [
+                                        'cellDesign' => $cellDesign,
+                                        'positionInformation' => $positionInformation,
+                                        'colorInformation' => $info['meta']['colors'],
+                                    ])
+                        @endforeach
+                    </div>
+                @endif
             @endforeach
             
             @foreach ($info['rows']['current']['cells'] as $position => $positionInformation)
