@@ -26,9 +26,11 @@ class OpenMeteo
         $this->timezone = TemperatureBlanketConfig::get('timezone');
     }
 
-    public function get(): Collection
+    public function get(?Carbon $date = null): Collection
     {
-        return collect(Cache::remember('openmeteo.'.$this->date->format('Ymd'), 60 * 60, function () {
+        $this->date = $date ?? new Carbon();
+
+        return collect(Cache::remember($this->getCacheKey($this->date), 60 * 60, function () {
             $now = Carbon::now();
             $today = new Carbon($this->date);
             $startDate = $today->clone()->subMonth()->format('Y-m-01');
@@ -69,9 +71,19 @@ class OpenMeteo
                 }
             }
 
-            Cache::set('openmeteo.'.$today->format('Ymd').'.written', Carbon::now('America/Chicago'));
+            Cache::set($this->getCachWritteneKey($today), Carbon::now($this->timezone));
 
             return $data;
         }));
+    }
+
+    protected function getCacheKey(Carbon $date): string
+    {
+        return 'openmeteo.'.$this->latitude.'.'.$this->longitude.'.'.$date->format('Ymd');
+    }
+
+    protected function getCachWritteneKey(Carbon $date): string
+    {
+        return $this->getCacheKey($date).'written';
     }
 }
