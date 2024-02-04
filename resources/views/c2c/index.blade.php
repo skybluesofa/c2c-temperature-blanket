@@ -7,6 +7,7 @@
         <title>{{ (new Carbon\Carbon())->format('Y') }} Temperature Blanket</title>
         
         <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
     <body class="antialiased bg-stone-800">
         <div class="fixed top-0 left-0 right-0 bg-stone-900 p-8 flex flex-row h-24">
@@ -32,6 +33,9 @@
                         'date' => $info['rows']['current']['cells']['next']['date'],
                     ])
             @foreach ($info['rows']['current']['cells'] as $position => $positionInformation)
+                @if (empty($positionInformation['weather']))
+                    <div class="bg-stone-900 text-stone-600 p-4 flex flex-row"><div class="grow self-center text-center"><i class="bi bi-slash-circle block text-3xl pb-2"></i>No data available for this date</div></div>
+                @else
                 <div class="grid grid-cols-4 gap-1">
                     @foreach ($info['meta']['design'] as $rows)
                         @foreach ($rows as $cellDesign)
@@ -43,6 +47,7 @@
                         @endforeach
                     @endforeach
                 </div>
+                @endif
             @endforeach
         </div>
 
