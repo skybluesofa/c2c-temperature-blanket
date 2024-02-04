@@ -6,8 +6,10 @@
 
         <title>{{ App\Facades\TemperatureBlanketConfig::get('year') }} Temperature Blanket</title>
         
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="icon" href="favicon.svg">
+        <link rel="mask-icon" href="favicon.svg" color="#fff">
         <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
     <body class="antialiased bg-stone-800">
         <div class="fixed top-0 left-0 right-0 bg-stone-900 p-8 flex flex-row h-24">
