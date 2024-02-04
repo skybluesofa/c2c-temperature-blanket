@@ -6,13 +6,15 @@ use App\Facades\OpenMeteo;
 use App\Facades\TemperatureBlanketConfig;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class TemperatureBlanketController extends Controller
 {
     protected ?Carbon $date;
 
-    protected $weatherData;
+    protected array $weatherData = [
+        'previous_row' => null,
+        'current_row' => null,
+    ];
 
     public function __construct(Request $request)
     {
@@ -26,15 +28,23 @@ class TemperatureBlanketController extends Controller
         return $this->getJsonOutput();
     }
 
-    protected function getWeatherData(): Collection
+    protected function getWeatherData(): array
     {
         $yesterday = $this->date->clone()->subDay(1);
         $tomorrow = $this->date->clone()->addDay(1);
+        $this->weatherData['current_row'] = collect([
+            $yesterday->format('Y-m-d') => $cachedWeatherData[$yesterday->format('Y-m-d')] ?? null,
+            $this->date->format('Y-m-d') => $cachedWeatherData[$this->date->format('Y-m-d')] ?? null,
+            $tomorrow->format('Y-m-d') => $cachedWeatherData[$tomorrow->format('Y-m-d')] ?? null,
+        ]);
 
-        $this->weatherData = collect([
-            $yesterday->format('Y-m-d') => OpenMeteo::get($yesterday) ?? null,
-            $this->date->format('Y-m-d') => OpenMeteo::get($this->date) ?? null,
-            $tomorrow->format('Y-m-d') => OpenMeteo::get($tomorrow) ?? null,
+        $yesterdayPreviousRowDate = $yesterday->clone()->subDay(TemperatureBlanketConfig::get('columns'));
+        $todayPreviousRowDate = $this->date->clone()->subDay(TemperatureBlanketConfig::get('columns'));
+        $tomorrowPreviousRowDate = $tomorrow->clone()->subDay(TemperatureBlanketConfig::get('columns'));
+        $this->weatherData['previous_row'] = collect([
+            $yesterdayPreviousRowDate->format('Y-m-d') => $cachedWeatherData[$yesterdayPreviousRowDate->format('Y-m-d')] ?? null,
+            $todayPreviousRowDate->format('Y-m-d') => $cachedWeatherData[$todayPreviousRowDate->format('Y-m-d')] ?? null,
+            $tomorrowPreviousRowDate->format('Y-m-d') => $cachedWeatherData[$tomorrowPreviousRowDate->format('Y-m-d')] ?? null,
         ]);
 
         return $this->weatherData;
@@ -52,24 +62,41 @@ class TemperatureBlanketController extends Controller
             'rows' => [
                 'previous' => [
                     'date' => $this->date->clone()->subDays(TemperatureBlanketConfig::get('columns')),
+                    'cells' => [
+                        'previous' => [
+                            'date' => $this->date->clone()->subDays(TemperatureBlanketConfig::get('columns'))->subDay(1),
+                            'weather' => $this->weatherData['previous_row']->first() ?? null,
+                            'show' => true,
+                        ],
+                        'current' => [
+                            'date' => $this->date->clone()->subDays(TemperatureBlanketConfig::get('columns')),
+                            'weather' => $this->weatherData['previous_row']->nth(2, 1)->first() ?? null,
+                            'show' => true,
+                        ],
+                        'next' => [
+                            'date' => $this->date->clone()->subDays(TemperatureBlanketConfig::get('columns'))->addDay(1),
+                            'weather' => $this->weatherData['previous_row']->last() ?? null,
+                            'show' => true,
+                        ],
+                    ],
                 ],
                 'current' => [
                     'date' => $this->date,
                     'cells' => [
                         'previous' => [
                             'date' => $this->date->clone()->subDay(1),
-                            'weather' => $this->weatherData->first() ?? null,
+                            'weather' => $this->weatherData['current_row']->first() ?? null,
                             'show' => true,
                         ],
                         'current' => [
                             'date' => $this->date,
-                            'weather' => $this->weatherData->nth(2, 1)->first() ?? null,
+                            'weather' => $this->weatherData['current_row']->nth(2, 1)->first() ?? null,
                             'show' => true,
                         ],
                         'next' => [
                             'date' => $this->date->clone()->addDay(1),
-                            'weather' => $this->weatherData->last() ?? null,
-                            'show' => is_array($this->weatherData->last() ?? null),
+                            'weather' => $this->weatherData['current_row']->last() ?? null,
+                            'show' => is_array($this->weatherData['current_row']->last() ?? null),
                         ],
                     ],
                 ],

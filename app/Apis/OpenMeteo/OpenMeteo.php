@@ -68,6 +68,8 @@ class OpenMeteo
                     ];
                 }
 
+                print_r($data);
+
                 Cache::set($this->getCacheKey($weatherDate), $data, $this->ttl);
                 Cache::set($this->getCacheWrittenKey($weatherDate), $now, $this->ttl);
             }
@@ -76,7 +78,7 @@ class OpenMeteo
         return Cache::get($this->getCacheKey($this->date));
     }
 
-    public function cachedDate(Carbon $date): Carbon
+    public function cachedDate(Carbon $date): ?Carbon
     {
         return Cache::get($this->getCacheWrittenKey($date));
     }
