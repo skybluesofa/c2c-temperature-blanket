@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\OldTemperatureBlanketController;
-use App\Http\Controllers\TemperatureBlanketController;
 use Illuminate\Support\Facades\Route;
+use SkyBlueSofa\C2CBlanketFramework\Http\Controllers\TemperatureBlanketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('c2c.index', ['info' => app()->make(TemperatureBlanketController::class)->show()]);
+    return view('c2c-blanket::index', ['info' => app()->make(TemperatureBlanketController::class)->show()]);
 });
 
 Route::get('/version', function () {
