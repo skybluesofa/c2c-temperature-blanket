@@ -19,3 +19,4 @@ auth.json
 /.vscode
 /dev-repos
 /meta_information/database/storage
+/config/c2c
