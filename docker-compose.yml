@@ -4,7 +4,7 @@ services:
     container_name: c2c_blanket_app
     build:
       context: .
-      dockerfile: ./meta_information/docker/c2c_blanket_app/Dockerfile
+      dockerfile: ./server/c2c_blanket_app/docker/Dockerfile
     image: c2c_blanket_app
     environment:
       - SERVICE_NAME=app
@@ -29,7 +29,7 @@ services:
     volumes:
       - ./storage/logs/nginx:/var/log/nginx
       - ./:/var/www/c2c_blanket
-      - ./meta_information/server_config/c2c_blanket_web/conf.d/:/etc/nginx/conf.d/
+      - ./server/c2c_blanket_web/config/conf.d/:/etc/nginx/conf.d/
     networks:
       - c2c_blanket
     depends_on:
