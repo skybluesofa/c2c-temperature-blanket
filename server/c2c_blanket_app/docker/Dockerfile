@@ -29,7 +29,7 @@ RUN apk update && \
     php81-mbstring
 
 # Copy xdebug config file
-COPY meta_information/server_config/c2c_blanket_app/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+COPY server/c2c_blanket_app/config/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
